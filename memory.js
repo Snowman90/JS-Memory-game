@@ -121,6 +121,8 @@ function restore2Cards(nr1, nr2)
 }
 
 
+
+
 //refaktoryzacja
 //1. ulozenie kart losowe
 //2. reveal cars uproscic
