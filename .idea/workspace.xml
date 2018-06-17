@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b3d0215-e194-424f-b679-1c8fd78c123d" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gra.html" beforeDir="false" afterPath="$PROJECT_DIR$/gra.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ciri.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/geralt.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/iorweth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/jaskier.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/karta.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/karta.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/triss.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/yen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/js_v2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/js_v2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/memory.js" beforeDir="false" afterPath="$PROJECT_DIR$/memory.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/USUN.js" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -242,16 +230,15 @@
       <workItem from="1528585568707" duration="4000" />
       <workItem from="1528618503246" duration="12032000" />
       <workItem from="1528728971841" duration="12599000" />
-      <workItem from="1528916454655" duration="26081000" />
+      <workItem from="1528916454655" duration="26366000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55516000" />
+    <option name="totallyTimeSpent" value="55801000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
