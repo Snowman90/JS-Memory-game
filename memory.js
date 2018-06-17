@@ -1,130 +1,135 @@
+//Preload obrazków
+$.fn.preload = function() { this.each(function() { $('<img/>')[0].src = this; })};
+let i = ["img/1.png", "img/2.png", "img/3.png", "img/4.png", "img/karta.png", "img/5.png", "img/6.png"];
+$(i).preload();
 
-var cards = ["ciri.png", "geralt.png", "jaskier.png", "jaskier.png", "iorweth.png", "triss.png", "geralt.png", "yen.png", "ciri.png", "triss.png", "yen.png", "iorweth.png"];
+let pictures, lock, oneVisible, pairs, imgData, cards;
+let turnCounter = 0;
 
-//alert(cards[4]);
+let g = new Game();
+g.play();
 
-//console.log(cards);
+function Game(){
+    //liczba par TODO jako zmienna
+    pairs = 6;
 
-var c0 = document.getElementById('c0');
-var c1 = document.getElementById('c1');
-var c2 = document.getElementById('c2');
-var c3 = document.getElementById('c3');
+    this.play = function() {
 
-var c4 = document.getElementById('c4');
-var c5 = document.getElementById('c5');
-var c6 = document.getElementById('c6');
-var c7 = document.getElementById('c7');
+        let $board = $(".board");
+        $board.html("<div class=\"field\"></div>");
 
-var c8 = document.getElementById('c8');
-var c9 = document.getElementById('c9');
-var c10 = document.getElementById('c10');
-var c11 = document.getElementById('c11');
+        let $field = $(".field");
 
-c0.addEventListener("click", function() { revealCard(0); });
-c1.addEventListener("click", function() { revealCard(1); });
-c2.addEventListener("click", function() { revealCard(2); });
-c3.addEventListener("click", function() { revealCard(3); });
+        pictures = [];
+        lock = false;
+        oneVisible = false;
+        imgData = "";
+        cards = [];
 
-c4.addEventListener("click", function() { revealCard(4); });
-c5.addEventListener("click", function() { revealCard(5); });
-c6.addEventListener("click", function() { revealCard(6); });
-c7.addEventListener("click", function() { revealCard(7); });
+        for(let i = 1; pairs >= i; i++) pictures.push(i + ".png");
 
-c8.addEventListener("click", function() { revealCard(8); });
-c9.addEventListener("click", function() { revealCard(9); });
-c10.addEventListener("click", function() { revealCard(10); });
-c11.addEventListener("click", function() { revealCard(11); });
+        // Return random ordered and doubled array
+        const shuffleArray = array => _(array).concat(array).shuffle().value();
+        pictures = shuffleArray(pictures);
 
+        $(pictures).each(() => $field.append("<div class=\"card\"></div>"));
+        $(".card").each(function (i) {
+            cards.push(new Card(pictures[i], this));
+            $(this).on("click", function () { cards[i].revealCard() });
+        });
 
-var oneVisible = false;
-var turnCounter = 0;
-var visible_nr;
-var lock = false;
-var pairsLeft =6;
+        $(".board").addClass('easy');
 
-function revealCard(nr)
-{
-    var opacityValue = $('#c'+nr).css('opacity');
+        //$board.html("<div class=\"score-header\">Congratulations You won!</div>");
+        $board.append("<div class=\"turns\">Turn Counter: " + 0 + "</div>");
 
-    //alert(opacityValue);
-    if (opacityValue !=0 && lock==false)
-    {
-        lock = true;
-        //alert(nr);
-        var obraz = "url(img/" + cards[nr] + ")";
-
-        $('#c'+nr).css('background-image', obraz);
-        $('#c'+nr).addClass('cardA');
-        $('#c'+nr).removeClass('card');
-
-        if (oneVisible == false)
-        {
-            //first card
-            oneVisible = true;
-            visible_nr = nr;
-            lock = false;
-        }
-        else
-        {
-            //second car
-
-            if(cards[visible_nr] == cards[nr])
-            {
-                //alert("para");
-                setTimeout(function() {hide2Cards(nr, visible_nr)}, 750);
-
-            }
-            else
-            {
-                //alert("pudlo");
-                setTimeout(function() {restore2Cards(nr, visible_nr)}, 1000);
-            }
-
-            turnCounter++;
-            $('.score').html('Turn counter: '+turnCounter);
-            oneVisible = false;
-        }
 
     }
 
 }
 
-function hide2Cards(nr1, nr2)
-{
-    $('#c'+nr1).css('opacity', '0');
-    $('#c'+nr2).css('opacity', '0');
+function Card(img, query) {
 
-    pairsLeft--;
+    this.img = "url(img/" + img + ")";
+    this.query = $(query);
+    this.state = "normal";
+    this.points = 30;
+    this.firstReveal = false;
 
-    if(pairsLeft == 0)
-    {
-        $('.board').html('<h1>You win! <br>Done in '+turnCounter+' turns</h1>');
+    this.revealCard = function () {
 
+        if(!lock && this.state === "normal") {
+
+            lock = true;
+            this.state = "revealed";
+
+            this.query.css({"background-image": this.img});
+            this.query.toggleClass("highlight rotateCard");
+
+            if(!oneVisible) {
+                oneVisible = true;
+                imgData = this.img;
+                lock = false;
+            } else {
+
+                this.img === imgData ? setTimeout(() => changeCardState("hide"), 750) : setTimeout(() => changeCardState("restore"), 1000);
+                oneVisible = false;
+                turnCounter++;
+                $(".turns").html('Turn counter: ' + turnCounter);
+            }
+        }
+
+
+
+    };
+
+    this.restore = function () {
+
+        if(!this.firstReveal) {
+            this.firstReveal = true;
+        } else {
+            if(this.points >= 0) this.points -= 5;
+        }
+
+        this.state = "normal";
+        this.query.toggleClass("highlight rotateCard");
+        this.query.css({"background-image":""});
+    };
+
+    this.hide = function () {
+        const hiddenCards = () => $.grep(cards, (e) => e.state === "hidden").length;
+        let $board = $(".board");
+
+        this.state = "hidden";
+        this.query.toggleClass("hidden highlight");
+
+
+        if(cards.length === hiddenCards()) {
+
+
+            $board.html("<div class=\"score-header\">Congratulations You won!</div>" +
+                "<div class=\"score\">Done in "+turnCounter+" turns</div>");
+
+            $board.append("<a class=\"btn\">Play again</a>");
+            $(".btn").on("click", () => g.play());
+        }
+
+    };
+
+    function changeCardState(state) {
+        lock = false;
+        $.grep(cards, function (e) {
+            if (e.state === "revealed") {
+                switch(state) {
+                    case "hide":
+                        e.hide();
+                        break;
+                    case "restore":
+                        e.restore();
+                        break;
+                }
+            }
+        });
     }
 
-    lock = false;
-
 }
-
-function restore2Cards(nr1, nr2)
-{
-    $('#c'+nr1).css('background-image', 'url(img/karta.png)');
-    $('#c'+nr1).addClass('card');
-    $('#c'+nr1).removeClass('cardA');
-
-    $('#c'+nr2).css('background-image', 'url(img/karta.png)');
-    $('#c'+nr2).addClass('card');
-    $('#c'+nr2).removeClass('cardA');
-
-    lock = false;
-
-}
-
-
-
-
-//refaktoryzacja
-//1. ulozenie kart losowe
-//2. reveal cars uproscic
-//3. koniec gry, restart
-//4. czy kazda karta musi byc osobynm obiektem jquery
